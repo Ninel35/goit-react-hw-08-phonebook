@@ -22,7 +22,7 @@ export const FormLogin = () => {
     
   const handlerSubmit = (evt) => {
     evt.preventDefault();
- dispatch(loginThunk( {
+    dispatch(loginThunk({
       email: email,
       password: password
     }))

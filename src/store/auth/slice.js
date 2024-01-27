@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginThunk, signUpThunk } from "./thunks";
+import { loginThunk, refreshThunk, signUpThunk } from "./thunks";
 
 
 const handlePending = (state) => {
@@ -7,9 +7,10 @@ const handlePending = (state) => {
             state.error = ''
 }
 
-const handleRejected = (state, {error}) => {
+const handleRejected = (state, {payload}) => {
          state.loading = false
-            state.error = error.message
+    state.error = payload
+    
 }
 
 const handleFulfilled = (state) => {
@@ -22,10 +23,11 @@ const handleSignUp = (state, { payload })=> {
     state.profile = payload.user
 }
 
-const handleLogin = (state, { payload })=> {
+const handleLogin = (state, { payload }) => {
     state.token = payload.token
     state.profile = payload.user
 }
+
 
 const initialState = {
     loading: false,
@@ -39,7 +41,14 @@ const authSlice = createSlice({
     initialState,
     extraReducers: builder => {
         builder.addCase(signUpThunk.fulfilled, handleSignUp)
-               .addCase(loginThunk.fulfilled, handleLogin)
+            .addCase(loginThunk.fulfilled, handleLogin)
+            .addCase(refreshThunk.fulfilled, handleSignUp)
+            .addCase(refreshThunk.rejected, (state, { payload }) => {
+                state.loading = false
+                state.error = payload
+                state.profile = null
+                localStorage.clear()
+             })
             .addMatcher((action) => action.type.endsWith('/pending'), handlePending)
             .addMatcher((action) => action.type.endsWith('/rejected'), handleRejected)
             .addMatcher((action) => action.type.endsWith('/fulfilled'), handleFulfilled)
