@@ -33,9 +33,9 @@ const Navigation = () => {
           Login
         </NavLink></button>}
 
-        <button><NavLink to="/register" className={css.link}>
+        {!profile && <button><NavLink to="/register" className={css.link}>
           Register
-        </NavLink></button>
+        </NavLink></button> }
         
       </ul>
      
