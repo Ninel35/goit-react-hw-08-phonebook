@@ -7,9 +7,9 @@ const handlePending = (state) => {
             state.error = ''
 }
 
-const handleRejected = (state, {error}) => {
+const handleRejected = (state, {payload}) => {
          state.loading = false
-            state.error = error.message
+            state.error = payload
 }
 
 const handleFulfilled = (state) => {

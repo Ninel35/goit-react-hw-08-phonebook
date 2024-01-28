@@ -1,16 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginThunk, refreshThunk, signUpThunk } from "./thunks";
+import { logOutThunk, loginThunk, refreshThunk, signUpThunk } from "./thunks";
 
 
 const handlePending = (state) => {
     state.loading = true
-            state.error = ''
+    state.error = ''
 }
 
-const handleRejected = (state, {payload}) => {
-         state.loading = false
+const handleRejected = (state, { payload }) => {
+    state.loading = false
     state.error = payload
-    
 }
 
 const handleFulfilled = (state) => {
@@ -18,7 +17,7 @@ const handleFulfilled = (state) => {
 }
 
 
-const handleSignUp = (state, { payload })=> {
+const handleSignUp = (state, { payload }) => {
     state.token = payload.token
     state.profile = payload.user
 }
@@ -26,6 +25,10 @@ const handleSignUp = (state, { payload })=> {
 const handleLogin = (state, { payload }) => {
     state.token = payload.token
     state.profile = payload.user
+}
+
+const handleRefresh = (state, { payload }) => {
+    state.profile = payload
 }
 
 
@@ -39,14 +42,25 @@ const initialState = {
 const authSlice = createSlice({
     name: 'auth',
     initialState,
+    reducers: {
+        logout: (state) => {
+            state.token = ''
+            state.profile = null
+        }
+    },
     extraReducers: builder => {
         builder.addCase(signUpThunk.fulfilled, handleSignUp)
             .addCase(loginThunk.fulfilled, handleLogin)
-            .addCase(refreshThunk.fulfilled, handleSignUp)
+            .addCase(refreshThunk.fulfilled, handleRefresh)
             .addCase(refreshThunk.rejected, (state, { payload }) => {
                 state.loading = false
                 state.error = payload
                 state.profile = null
+                localStorage.clear()
+            })
+              .addCase(logOutThunk.fulfilled, (state) => {
+                  state.profile = null
+                  state.token = ''
                 localStorage.clear()
              })
             .addMatcher((action) => action.type.endsWith('/pending'), handlePending)
@@ -56,3 +70,4 @@ const authSlice = createSlice({
     }
 })
 export const authReducer = authSlice.reducer
+export const {logout} = authSlice.actions

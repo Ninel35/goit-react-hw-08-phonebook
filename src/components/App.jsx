@@ -4,6 +4,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { profileAuthSelector } from 'store/auth/selectors.js';
 import { refreshThunk } from 'store/auth/thunks.js';
+import PrivateRoute from 'guards/PrivateRoute.jsx';
+import PublicRoute from 'guards/PublicRoute.jsx';
 
 const Home = lazy(()=> import('pages/Home.jsx'))
 const RegisterPage = lazy(()=> import('pages/RegisterPage.jsx'))
@@ -16,7 +18,6 @@ export const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log('profile', profile)
     !profile && dispatch(refreshThunk())
   }, [dispatch, profile])
   
@@ -26,9 +27,9 @@ export const App = () => {
         <Routes>
           <Route path='/' element={<Layout />} >
             <Route index element={<Home />} />
-            <Route path='/register' element={<RegisterPage />} />
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/contacts' element={<ContactsPage />} />
+            <Route path='/register' element={<PublicRoute><RegisterPage /></PublicRoute>} />
+            <Route path='/login' element={<PublicRoute><LoginPage /></PublicRoute>} />
+            <Route path='/contacts' element={<PrivateRoute><ContactsPage /></PrivateRoute>} />
           </Route>
 
          

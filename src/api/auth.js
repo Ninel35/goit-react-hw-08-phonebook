@@ -9,7 +9,6 @@ export const SignUpApi = async (body) => {
 
 export const LoginApi = async (body) => {
     const { data } = await api.post(`users/login`, body)
-     console.log('data', data)
     return data
 }
 
@@ -23,10 +22,12 @@ export const getCurrentUser = async (token) => {
 }
 
 export const logOut = async (token) => {
-    const { data } = await api.post(`users/logout`, {
+    console.log('token', token)
+    const { data } = await api.post(`users/logout`, {}, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
+    console.log('data', data)
     return data
 }

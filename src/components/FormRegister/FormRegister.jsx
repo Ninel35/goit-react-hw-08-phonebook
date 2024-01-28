@@ -5,11 +5,11 @@ import { signUpThunk } from 'store/auth/thunks';
 
 export const RegisterForm = () => {
 
-   const  [email, setEmail]  = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
     
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   
   const handleChange = ({ target: { name, value } }) => {
@@ -37,17 +37,17 @@ export const RegisterForm = () => {
     <form className={css.form} onSubmit={handlerSubmit} autoComplete="off">
       <label className={css.label}>
         Username
-        <input type="text" name="name" onChange={handleChange}/>
+        <input type="text" name="name" onChange={handleChange} />
       </label>
       <label className={css.label}>
         Email
-        <input type="email" name="email" onChange={handleChange}/>
+        <input type="email" name="email" onChange={handleChange} />
       </label>
       <label className={css.label}>
         Password
-        <input type="password" name="password" onChange={handleChange}/>
+        <input type="password" name="password" onChange={handleChange} />
       </label>
       <button type="submit">Register</button>
     </form>
   );
-};
+}
